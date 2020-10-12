@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
+
+
+void printcomma(int n) {
+    if (n < 1000) {
+        printf("%d", n);
+        return;
+    }
+    printcomma(n/1000);
+    printf(",%03d", n%1000);
+}
 
 int main(void)
 {
@@ -31,18 +40,26 @@ int main(void)
     }
     fclose(fp);
 
-    setlocale(LC_NUMERIC, "");
-
-    printf("전체 데이터 갯수 %'d개 중 이름은 %'d개\n\n", total_cnt, name_cnt);
+    printf("전체 데이터 갯수 ");
+    printcomma(total_cnt);
+    printf("개 중 이름은 ");
+    printcomma(name_cnt);
+    printf("개\n\n");
 
     printf("나이:\n");
-    for (int i = 0; i < 8; i++)
-        printf("%d ~ %d : %'d명\n", 10*(i+1), 10*(i+1)+9, age_cnt[i]);
+    for (int i = 0; i < 8; i++) {
+        printf("%d ~ %d : ", 10*(i+1), 10*(i+1)+9);
+        printcomma(age_cnt[i]);
+        printf("명\n");
+    }
     printf("\n");
 
     printf("Zip code\n");
-    for (int i = 0; i < 15; i++)
-        printf("KS%03d: %'d명\n", i+1, zip_cnt[i]);
+    for (int i = 0; i < 15; i++) {
+        printf("KS%03d: ", i+1);
+        printcomma(zip_cnt[i]);
+        printf("명\n");
+    }
     printf("\n");
 
     return 0;
