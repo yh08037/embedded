@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     int i, j, k;
     int len, num_thread;
     double start, stop;
+    double single, multi;
 
     if (argc == 2) {
         len = atoi(argv[1]);
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
 
     // print_matrix(c, "C", len);
 
-    printf("Processing time: %lf\n", stop - start);
+    printf("Processing time: %lf\n", single = stop - start);
     
     
     for (i = 0; i < len; i++) { // i (Row)
@@ -51,8 +52,13 @@ int main(int argc, char *argv[])
 
     // print_matrix(c, "C", len);
 
-    printf("Processing time: %lf\n", stop - start);
+    printf("Processing time: %lf\n", multi = stop - start);
 
+    if (single > multi)
+        printf("mat_mul_th is %lf times faster\n", single/multi);
+    else
+        printf("mat_mul is %lf times faster\n", multi/single);
+    
     free_matrix(a, b, c, len);
 
     return 0;
