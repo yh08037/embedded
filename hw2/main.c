@@ -15,12 +15,13 @@ int main(int argc, char *argv[])
 
     if (argc == 2) {
         len = atoi(argv[1]);
-        num_thread = 8;
+        num_thread = 4;
     } else if (argc == 3) {
         len = atoi(argv[1]);
         num_thread = atoi(argv[2]);
     } else {
         printf("Usage: matrix [row] [num_thread]\n");
+	exit(1);
     }
 
     init_matrix(&a, &b, &c, len);
