@@ -1,18 +1,5 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <pthread.h>
+#include "matrix.h"
 
-
-int mat_add(int** src1, int** src2, int** dst, int len)
-{
-
-}
-
-int mat_sub(int** src1, int** src2, int** dst, int len)
-{
-
-}
 
 int mat_mul(int** src1, int** src2, int** dst, int len)
 {
@@ -32,31 +19,22 @@ int mat_mul(int** src1, int** src2, int** dst, int len)
     return 0;
 }
 
-typedef struct {
-    int i;
-    int** src1;
-    int** src2;
-    int** dst;
-    int len;
-    int num_thread;
-} matmul_arg_t;
-
 void* mat_mul_th_kernel(void *arg)
 {
     int j, k, result;
     matmul_arg_t *p_arg = (matmul_arg_t*)arg;
 
-    int i = p_arg->i;
-    int** src1 = p_arg->src1;
-    int** src2 = p_arg->src2;
-    int** dst = p_arg->dst;
-    int len = p_arg->len;
+    int i          = p_arg->i;
+    int **src1     = p_arg->src1;
+    int **src2     = p_arg->src2;
+    int **dst      = p_arg->dst;
+    int len        = p_arg->len;
     int num_thread = p_arg->num_thread;
 
     // printf("Thread %d started\n", i);
 
     for (; i < len; i += num_thread) {
-        for (j = 0; j < len; j++) { // j (column)
+        for (j = 0; j < len; j++) {
             result = 0;
             for (k = 0; k < len; k++) {
                 result += src1[i][k] * src2[k][j];
@@ -77,11 +55,11 @@ int mat_mul_th(int** src1, int** src2, int** dst, int len, int num_thread)
     a_thread = (pthread_t*)malloc(sizeof(pthread_t) * num_thread);
 
     for (i = 0; i < num_thread; i++) {
-        (arg+i)->i = i;
-        (arg+i)->src1 = src1;
-        (arg+i)->src2 = src2;
-        (arg+i)->dst = dst;
-        (arg+i)->len = len;
+        (arg+i)->i          = i;
+        (arg+i)->src1       = src1;
+        (arg+i)->src2       = src2;
+        (arg+i)->dst        = dst;
+        (arg+i)->len        = len;
         (arg+i)->num_thread = num_thread;
 
         // printf("Thread %d called\n", i);
@@ -107,7 +85,57 @@ int mat_mul_th(int** src1, int** src2, int** dst, int len, int num_thread)
     return 0;
 }
 
-int mat_inv(int** src, int** dst, int len)
-{
 
+void init_matrix(int*** p_a, int*** p_b, int*** p_c, int len)
+{
+    int **a, **b, **c;
+    int i, j;
+    
+    a = (int**)malloc(len * sizeof(int*));
+    b = (int**)malloc(len * sizeof(int*));
+    c = (int**)malloc(len * sizeof(int*));
+
+    for (i = 0; i < len; i++) {
+        a[i] = (int*)malloc(len * sizeof(int));
+        b[i] = (int*)malloc(len * sizeof(int));
+        c[i] = (int*)malloc(len * sizeof(int));
+    }
+
+    srandom((unsigned int)time(NULL));
+
+    for (i = 0; i < len; i++) { // i (Row)
+        for (j = 0; j < len; j++) { // j (column)
+            a[i][j] = random() % 10;
+            b[i][j] = random() % 10;
+            c[i][j] = 0;
+        }
+    }
+
+    *p_a = a;
+    *p_b = b;
+    *p_c = c;
+}
+
+void free_matrix(int **a, int **b, int **c, int len)
+{
+    for (int i = 0; i < len; i++) {
+        free(a[i]);
+        free(b[i]);
+        free(c[i]);
+    }
+    free(a);
+    free(b);
+    free(c);
+}
+
+
+void print_matrix(int **matrix, char *name, int len)
+{
+    printf("== %s matrix ========================\n", name);
+    for (int i = 0; i < len; i++) { // i (Row)
+        for (int j = 0; j < len; j++) { // j (column)
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
 }
