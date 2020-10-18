@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         len = atoi(argv[1]);
         num_thread = atoi(argv[2]);
     } else {
-        printf("Usage: matrix [row] [num_thread\n");
+        printf("Usage: matrix [row] [num_thread]\n");
     }
 
     init_matrix(&a, &b, &c, len);

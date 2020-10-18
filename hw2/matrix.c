@@ -1,7 +1,7 @@
 #include "matrix.h"
 
 
-int mat_mul(int** src1, int** src2, int** dst, int len)
+int mat_mul(int **src1, int **src2, int **dst, int len)
 {
     int i, j, k;
     int result;
@@ -19,7 +19,7 @@ int mat_mul(int** src1, int** src2, int** dst, int len)
     return 0;
 }
 
-void* mat_mul_th_kernel(void *arg)
+void *mat_mul_th_kernel(void *arg)
 {
     int j, k, result;
     matmul_arg_t *p_arg = (matmul_arg_t*)arg;
@@ -44,7 +44,7 @@ void* mat_mul_th_kernel(void *arg)
     }
 }
 
-int mat_mul_th(int** src1, int** src2, int** dst, int len, int num_thread)
+int mat_mul_th(int **src1, int **src2, int **dst, int len, int num_thread)
 {
     int             i, res;
     matmul_arg_t    *arg;
@@ -86,19 +86,19 @@ int mat_mul_th(int** src1, int** src2, int** dst, int len, int num_thread)
 }
 
 
-void init_matrix(int*** p_a, int*** p_b, int*** p_c, int len)
+void init_matrix(int ***p_a, int ***p_b, int ***p_c, int len)
 {
     int **a, **b, **c;
     int i, j;
     
-    a = (int**)malloc(len * sizeof(int*));
-    b = (int**)malloc(len * sizeof(int*));
-    c = (int**)malloc(len * sizeof(int*));
+    a = (int **)malloc(len * sizeof(int *));
+    b = (int **)malloc(len * sizeof(int *));
+    c = (int **)malloc(len * sizeof(int *));
 
     for (i = 0; i < len; i++) {
-        a[i] = (int*)malloc(len * sizeof(int));
-        b[i] = (int*)malloc(len * sizeof(int));
-        c[i] = (int*)malloc(len * sizeof(int));
+        a[i] = (int *)malloc(len * sizeof(int));
+        b[i] = (int *)malloc(len * sizeof(int));
+        c[i] = (int *)malloc(len * sizeof(int));
     }
 
     srandom((unsigned int)time(NULL));
