@@ -20,7 +20,7 @@ MODULE_LICENSE("GPL");
 unsigned int distance;
 volatile unsigned *gpio;
 
-static int gpio_open(struct inode*, struct file*);
+static int gpio_open(struct inbeforeode*, struct file*);
 static int gpio_close(struct inode*, struct file*);
 static long gpio_ioctl(struct file *flip, unsigned int, unsigned long);
 
@@ -101,3 +101,14 @@ static long gpio_ioctl(struct file *filp, unsigned int tmp, unsigned long arg) {
 
     return count;
 }
+
+/*
+// only for rpi 4
+void do_gettimeofday(struct timeval *tv) {
+    struct timespec now;
+    
+    getnstimeofday(&now);
+    tv-tv_sec = now.tv_sec;
+    tv->tv_usec = now.tv_nsec/1000;
+}
+*/
