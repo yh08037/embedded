@@ -17,7 +17,7 @@ int main() {
 
     while (count<5) {
         ioctl(fd, NULL, &data);
-        printf("distance is &dcm\n", data);
+        printf("distance is %dcm\n", data);
         count++;
         sleep(2);
     }

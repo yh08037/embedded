@@ -1,10 +1,11 @@
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/module.h>
-#include <iinux/io.h>
+#include <linux/io.h>
 #include <linux/gpio.h>
-#include <asm/uaccess.h>
-#include <malloc.h/platform.h>
+#include <linux/uaccess.h>
+//#include <asm/uaccess.h>
+//#include <mach/platform.h>
 #include <linux/delay.h>
 #include <linux/time.h>
 #include <linux/interrupt.h>
@@ -20,7 +21,7 @@ MODULE_LICENSE("GPL");
 unsigned int distance;
 volatile unsigned *gpio;
 
-static int gpio_open(struct inbeforeode*, struct file*);
+static int gpio_open(struct inode*, struct file*);
 static int gpio_close(struct inode*, struct file*);
 static long gpio_ioctl(struct file *flip, unsigned int, unsigned long);
 
@@ -46,7 +47,7 @@ int start_module(void) {
 
     gpio_cdev.owner = THIS_MODULE;
     count = 1;
-    err = cdev_add(&gpio_cdev, &gpio_fops);
+    err = cdev_add(&gpio_cdev, devno, count); 
     if (err<0) {
         printk("Error : Device add\n");
         return -1;
@@ -69,15 +70,15 @@ void end_module(void) {
     gpio_free(GPIO_ECHO);
 }
 
-module_init(GPIO_TRIG);
-module_exit(GPIO_ECHO);
+module_init(start_module);
+module_exit(end_module);
 
 static int gpio_open(struct inode *inod, struct file *fil) {
     try_module_get(THIS_MODULE);
     return 0;
 }
 
-static int gpio_open(struct inode *inod, struct file *fil) {
+static int gpio_close(struct inode *inod, struct file *fil) {
     module_put(THIS_MODULE);
     return 0;
 }
